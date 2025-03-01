@@ -1,12 +1,14 @@
 "use client";
 import { useState } from "react";
-
+import { FaCheckCircle } from "react-icons/fa"; 
+import { FaCopy } from "react-icons/fa";
 export default function LoveLetterGenerator() {
   const [herName, setherName] = useState("");
   const [yourName, setyourName] = useState("");
   const [mood, setMood] = useState("romantic");
   const [letter, setLetter] = useState("");
   const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const generateLetter = async (e) => {
     e.preventDefault();
@@ -46,10 +48,18 @@ export default function LoveLetterGenerator() {
     }
   };
 
+  const copyLetter = () => {
+    if (letter) {
+      navigator.clipboard.writeText(letter);
+      setCopied(true); 
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
   return (
     <div className="min-h-screen text-black flex flex-col items-center justify-center bg-pink-100 p-6">
       <h1 className="text-3xl text-center font-bold text-red-500 mb-4">
-        💌 AI Love Letter Generator
+        💌 AI Letter Generator
       </h1>
       <input
         type="text"
@@ -88,6 +98,19 @@ export default function LoveLetterGenerator() {
           </h2>
           <hr />
           <p className="text-zinc-700 mt-4 font-medium whitespace-pre-line">{letter}</p>
+          <button
+            onClick={copyLetter}
+            className="bg-green-500 text-white px-4 py-2 rounded-lg mt-4 flex items-center justify-center space-x-2"
+          >
+            {copied ? (
+              <>
+                <FaCheckCircle className="text-white" />
+                <span className="transition-opacity duration-300 opacity-80">Copied!</span>
+              </>
+            ) : (
+              <span className="flex gap-2 items-center"><FaCopy/>Copy Letter</span>
+            )}
+          </button>
         </div>
       )}
     </div>
